@@ -17,8 +17,10 @@ import { BienvenueComponent } from './bienvenue/bienvenue.component';
     AppRoutingModule,
     RouterModule.forRoot([
       { path:'bienvenue', component:BienvenueComponent},
-    {path:'', redirectTo:'bienvenue',pathMatch:'full'}
-    ])
+    {path:'', redirectTo:'bienvenue',pathMatch:'full'},
+    {path:'**', redirectTo:'bienvenue', pathMatch:'full'},
+  
+  ])
   ],
   providers: [],
   bootstrap: [AppComponent]
