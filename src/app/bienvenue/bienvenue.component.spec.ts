@@ -22,4 +22,12 @@ describe('BienvenueComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('should render title in a h1 tag', () => {
+    const fixture = TestBed.createComponent(BienvenueComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h1')?.textContent).toContain('Bienvenue works!');
+  });
+
+
 });

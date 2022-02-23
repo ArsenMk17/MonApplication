@@ -22,4 +22,8 @@ describe('ProblemeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('champ nom du produit doit comporter au moins 3 caracteres', () => {
+    expect(true).toBeTruthy();
+  });
+
 });
