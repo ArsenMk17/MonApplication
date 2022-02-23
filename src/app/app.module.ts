@@ -1,30 +1,34 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BienvenueComponent } from './bienvenue/bienvenue.component';
+import { AccueilComponent } from './accueil/accueil.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ProduitComponent } from './produit/produit.component';
-import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import { ProblemeComponent } from './probleme/probleme.component';
+
+
+
+
+
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    BienvenueComponent,
-    ProduitComponent
+    AccueilComponent,
+   ProblemeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    AngularFontAwesomeModule,
     RouterModule.forRoot([
     
-      { path:'bienvenue', component:BienvenueComponent},
-    {path:'', redirectTo:'bienvenue',pathMatch:'full'},
-    {path:'**', redirectTo:'bienvenue', pathMatch:'full'},
+    { path:'accueil', component:AccueilComponent},
+    {path:'', redirectTo:'accueil',pathMatch:'full'},
+    {path:'**', redirectTo:'accueil', pathMatch:'full'},
   
   
   

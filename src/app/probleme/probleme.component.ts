@@ -11,5 +11,6 @@ export class ProblemeComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  save(): void {
+  }
 }
