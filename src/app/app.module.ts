@@ -6,6 +6,9 @@ import { AppComponent } from './app.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProblemeComponent } from './probleme/probleme.component';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { ProblemeData } from './probleme/probleme-data';
 
 
 
@@ -24,6 +27,8 @@ import { ProblemeComponent } from './probleme/probleme.component';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    HttpClientModule,
+    HttpClientInMemoryWebApiModule .forRoot(ProblemeData, { delay: 1000 }),
     RouterModule.forRoot([
     
     { path:'accueil', component:AccueilComponent},
