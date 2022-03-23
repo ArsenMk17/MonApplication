@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VerifierCaracteresValidator } from '../shared/longueur-minimum.component';
+import { ITypeProbleme } from './probleme';
+import { TypeProblemeService } from './probleme.service';
 
 @Component({
   selector: 'app-probleme',
@@ -13,7 +15,9 @@ import { VerifierCaracteresValidator } from '../shared/longueur-minimum.componen
 
 export class ProblemeComponent implements OnInit {
   problemeForm: FormGroup;
-  constructor(private fb: FormBuilder){}
+  errorMessage: string;
+  typesProbleme: ITypeProbleme[];
+  constructor(private fb: FormBuilder, private typeproblemeService: TypeProblemeService) { }
   
   
   
@@ -28,11 +32,13 @@ export class ProblemeComponent implements OnInit {
     this.problemeForm = this.fb.group({
         //nomProbleme: ['',[Validators.minLength(3)]],
         prenom: ['' , [VerifierCaracteresValidator.longueurMinimum(3), Validators.required]],
-        
-      
+        nom : ['', [VerifierCaracteresValidator.longueurMinimum(3),Validators.required]],
+        noProblem :['']
       });
   
-  
+      this.typeproblemeService.obtenirProbleme()
+      .subscribe(tp => this.typesProbleme = tp,
+      error => this.errorMessage = <any>error);
   
   }
   
@@ -43,4 +49,8 @@ export class ProblemeComponent implements OnInit {
   
   save(): void {
   }
+        
+
+
+
 }

@@ -9,7 +9,7 @@ import { ProblemeComponent } from './probleme/probleme.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { ProblemeData } from './probleme/probleme-data';
-import { ProblemeService } from './probleme/probleme.service';
+import { TypeProblemeService } from './probleme/probleme.service';
 
 
 
@@ -22,7 +22,7 @@ import { ProblemeService } from './probleme/probleme.service';
   declarations: [
     AppComponent,
     AccueilComponent,
-   ProblemeComponent
+    ProblemeComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +40,7 @@ import { ProblemeService } from './probleme/probleme.service';
   
   ])
   ],
-  providers: [ProblemeService],
+  providers: [TypeProblemeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
