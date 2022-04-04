@@ -1,8 +1,12 @@
+import { HttpClientModule } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
-import { VerifierCaracteresValidator } from '../shared/longueur-minimum.component';
+import { VerifierCaracteresValidator } from '../shared/valiaterzones/longueur-minimum.component';
+
 
 import { ProblemeComponent } from './probleme.component';
+import { TypeproblemeService } from './typeprobleme.service';
 
 describe('ProblemeComponent', () => {
   let component: ProblemeComponent;
@@ -10,59 +14,52 @@ describe('ProblemeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [ ProblemeComponent ]
+      imports: [ReactiveFormsModule, HttpClientModule],
+      declarations: [ ProblemeComponent ],
+      providers:[TypeproblemeService]
     })
     .compileComponents();
   });
 
-  
-  
   beforeEach(() => {
     fixture = TestBed.createComponent(ProblemeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  }); 
-
-  
-  it('champ nom du probleme doit comporter au moins 3 caracteres', () => {
-    let zone = component.problemeForm.controls['prenom'];
-    zone.setValue('a'.repeat(3));
-    expect(zone.valid).toBeTruthy();
   });
-  it("#1 | Zone PRÉNOM invalide avec 2 caractèress", () =>{
+
+  //TEST #1
+  it('#1 | Zone PRÉNOM invalide avec 2 caractères', () => {
     let zone = component.problemeForm.controls['prenom'];
-    zone.setValue("a".repeat(2));
+    zone.setValue('a'.repeat(2));
     let errors = zone.errors || {};
     expect(errors['minlength']).toBeFalsy();
-    
-  
   });
 
-    it("#2 | Zone PRÉNOM valide avec 3 caractèress", () =>{
-      let zone = component.problemeForm.controls['prenom'];
-      zone.setValue("a".repeat(3));
-      let errors = zone.errors || {};
-      expect(errors['minlength']).toBeFalsy();
-      
-    
-      });
+   //TEST #2
+  it('#2 | Zone PRÉNOM valide avec 3 caractères', () => {
+    let zone = component.problemeForm.controls['prenom'];
+    zone.setValue('a'.repeat(3));
+    let errors = zone.errors || {};
+    expect(zone.valid).toBeTruthy();
+  });
 
-      it("#3 | Zone PRÉNOM valide avec 200 caractèress", () =>{
-        let zone = component.problemeForm.controls['prenom'];
-        zone.setValue("a".repeat(200));
-        let errors = zone.errors || {};
-        expect(errors['minlength']).toBeFalsy();
-        });
-  
-  it('#4 Zone PRÉNOM invalide avec aucune valeur', () => {
+   //TEST #3
+  it('#3 | Zone PRÉNOM valide avec 200 caractères', () => {
+    let zone = component.problemeForm.controls['prenom'];
+    zone.setValue('a'.repeat(200));
+    let errors = zone.errors || {};
+    expect(zone.valid).toBeTruthy();
+  });
+
+   //TEST #4
+  it('#4 | Zone PRÉNOM invalide avec aucune valeur', () => {
     let zone = component.problemeForm.controls['prenom'];
     let errors = zone.errors;
     expect(errors['required']).toBeTruthy();
   });
 
-  
-  it('#5 Zone PRÉNOM valide avec 10 espaces', () => {
+   //TEST #5
+  it('#5 | Zone PRÉNOM invalide avec 10 espaces', () => {
     let zone = component.problemeForm.controls['prenom'];
     zone.setValue(' '.repeat(10));
     let errors = zone.errors || {};
@@ -70,71 +67,256 @@ describe('ProblemeComponent', () => {
     expect(zone.valid).toBeFalsy();
   });
 
-   
-  it('#6 Zone PRÉNOM valide avec 2 espaces et 1 caractère', () => {
+   //TEST #6
+  it('#6 | Zone PRÉNOM invalide avec 2 espaces et 1 caractère', () => {
     let zone = component.problemeForm.controls['prenom'];
     zone.setValue(' '.repeat(2) + 'a'.repeat(1));
     let errors = zone.errors || {};
     expect(zone.valid).toBeFalsy();
   });
-  it('#7 | Une chaîne avec 10 espaces est invalide', () => {
-    let control = { value: ' '.repeat(10) }
-    let validatorFn =  VerifierCaracteresValidator.longueurMinimum(10);
-    let result= validatorFn(control as AbstractControl);
-    expect(result['nbreCaracteresInsuffisant']).toBe(true);
-  }); 
-  
-  it('#8 | Une phrase avec des mots est valide', () => {
-    let control = { value: 'a' }
+
+   // TEST #7
+ it('#7 | Une chaîne avec 10 espaces est invalide', () => {
+  let control = { value: ' '}
+  let validatorFn =  VerifierCaracteresValidator.longueurMinimum(3);
+  let result= validatorFn(control as AbstractControl);
+  expect(result['nbreCaracteresInsuffisant']).toBe(true);
+});
+   // TEST #8
+   it('#8 | Une phrase avec des mots est valide', () => {
+    let control = { value: 'Vive angular' }
     let validatorFn =  VerifierCaracteresValidator.longueurMinimum(3);
     let result= validatorFn(control as AbstractControl);
     expect(control.value).toBeTruthy;
-  }); 
-  
+  });
+  // TEST #9
   it('#9 | Une phrase avec 3 espaces, des mots et ensuite 3 espaces est valide', () => {
-    let control = { value: '   je le veux   '}
+    let control = { value: ' je le veux ' }
     let validatorFn =  VerifierCaracteresValidator.longueurMinimum(3);
     let result= validatorFn(control as AbstractControl);
     expect(control.value).toBeTruthy;
-  }); 
-  
-  it('#10 |Une phrase avec 1 espaces et 2 caracteres est invalide', () => {
-    let control = { value: 'x'}
-    let validatorFn =  VerifierCaracteresValidator.longueurMinimum(3);
-    let result= validatorFn(control as AbstractControl);
-    expect(result['nbreCaracteresInsuffisant']).toBeTruthy;
-  }); 
-  
-  it('#11 |Une phrase avec 2 espaces et 1 caracteres est invalide', () => {
+  });
+    // TEST #10
+    it('#10 | Une phrase avec 1 espace et 2 caractères est invalide.', () => {
+      let control = { value: ' xx' }
+      let validatorFn =  VerifierCaracteresValidator.longueurMinimum(3);
+      let result= validatorFn(control as AbstractControl);
+      expect(result['nbreCaracteresInsuffisant']).toBe(true);
+    });
+      // TEST #11
+  it('#11 | Une phrase avec 2 espaces et 1 caractère est invalide', () => {
     let control = { value: '  x'}
     let validatorFn =  VerifierCaracteresValidator.longueurMinimum(3);
     let result= validatorFn(control as AbstractControl);
-    expect(result['nbreCaracteresInsuffisant']).toBe(true);
-  }); 
-  
-  it('#12 |Une phrase avec 3 espaces et 3 caracteres est valide', () => {
-    let control = { value: '   xxx'}
+    expect(result['nbreCaracteresInsuffisant']).toBeTruthy();
+  });
+    // TEST #12
+    it('#12 | Une phrase avec 3 espaces et 3 caractères est valide', () => {
+      let control = { value: '   xxx'}
+      let validatorFn =  VerifierCaracteresValidator.longueurMinimum(3);
+      let result= validatorFn(control as AbstractControl);
+      expect(control.value).toBeTruthy;
+    });
+      // TEST #13
+  it('#13 | Une phrase avec 5 espaces, 5 caractères et 5 espaces est valide', () => {
+    let control = { value: '     xxxxx     '}
     let validatorFn =  VerifierCaracteresValidator.longueurMinimum(3);
     let result= validatorFn(control as AbstractControl);
     expect(control.value).toBeTruthy;
-  }); 
-  it('#13 |Une phrase avec 5 espaces et 5 caracteres est valide', () => {
-    let control = { value: '     xxx    '}
-    let validatorFn =  VerifierCaracteresValidator.longueurMinimum(3);
-    let result= validatorFn(control as AbstractControl);
-    expect(control.value).toBeTruthy;
-  }); 
-  it('#14 |Une chaine nulle est invalide', () => {
-    let control = { }
-    let validatorFn =  VerifierCaracteresValidator.longueurMinimum(3);
-    let result= validatorFn(control as AbstractControl);
-    expect(result['nbreCaracteresInsuffisant']).toBe(true);
-  }); 
-  
-  /*it('#8 | Une phrase avec des mots est valide', () => {
-    let control = { value: ''.repeat(0) }
-    let validatorFn =  VerifierCaracteresValidator.plage();
-    let result= validatorFn(control as AbstractControl);
-    expect(result['plageInvalide']).toBe(true);
-  }); */
+  });
+    // TEST #14
+    it('#14 | Une chaîne nulle est invalide', () => {
+      let control = {};
+      let validatorFn =  VerifierCaracteresValidator.longueurMinimum(3);
+      let result= validatorFn(control as AbstractControl);
+      expect(result['nbreCaracteresInsuffisant']).toBeFalse;
+    });
+
+    // TEST #15
+    it('#15 | Zone TELEPHONE est désactivée quand ne pas me notifier', () => {
+      component.gestionNotification('typeNotification');
+      let zone = component.problemeForm.get('telephone');
+      expect(zone.status).toEqual('DISABLED');
+    });
+
+    // TEST #16
+    it('#16 | Zone TELEPHONE est vide quand ne pas me notifier', () => {
+      component.gestionNotification('typeNotification');
+      let zone = component.problemeForm.get('telephone');
+      expect(zone.value).toBeNull();
+      
+    });
+     // TEST #17
+     it('#17 | Zone ADRESSE COURRIEL est désactivée quand ne pas me notifier', () => {
+      component.gestionNotification('typeNotification');
+      let zone = component.problemeForm.get('courrielGroup.courriel');
+      expect(zone.status).toEqual('DISABLED');
+    });
+     // TEST #18
+     it('#18 | Zone CONFIRMER COURRIEL est désactivée quand ne pas me notifier', () => {
+      component.gestionNotification('typeNotification');
+      let zone = component.problemeForm.get('courrielGroup.courrielConfirmation');
+      expect(zone.status).toEqual('DISABLED');
+    });
+
+     // TEST #19
+    it('#19 | Zone TELEPHONE est désactivée quand notifier par courriel', () => {
+      component.gestionNotification('typeNotification');
+      let zone = component.problemeForm.get('telephone');
+      expect(zone.status).toEqual('DISABLED');
+    });
+
+     // TEST #20
+    it('#20 | Zone ADRESSE COURRIEL est activée quand notifier par courriel', () => {
+      component.gestionNotification('courriel');
+      let zone = component.problemeForm.get('courrielGroup.courriel');
+      expect(zone.enabled).toBeTrue();
+    });
+
+     // TEST #21
+    it('#21 | Zone CONFIRMER COURRIEL est activée quand notifier par courriel', () => {
+      component.gestionNotification('courriel');
+      let zone = component.problemeForm.get('courrielGroup.courrielConfirmation');
+      expect(zone.enabled).toBeTrue();
+    });
+
+    // TEST #22
+    it('#22 | Zone ADRESSE COURRIEL est invalide sans valeur quand notifier par courriel', () => {
+      component.gestionNotification('courriel');
+      let zone = component.problemeForm.get('courrielGroup.courriel');
+      let errors = zone.errors;
+      expect(errors['required']).toBeTruthy();
+    });
+
+    // TEST #23
+    it('#23 | Zone CONFIRMER COURRIEL est invalide sans valeur quand notifier par courriel', () => {
+      component.gestionNotification('courriel');
+      let zone = component.problemeForm.get('courrielGroup.courrielConfirmation');
+      let errors = zone.errors;
+    expect(errors['required']).toBeTruthy();
+    });
+
+     // TEST #24
+     it('#24 | Zone ADRESSE COURRIEL est invalide avec un format non conforme', () => {
+      component.gestionNotification('courriel');
+      let zone = component.problemeForm.get('courrielGroup.courriel');
+      zone.setValue('abcd');
+      expect(zone.valid).toBeFalse();
+    });
+
+    // TEST #25
+    it('#25 | Zone ADRESSE COURRIEL sans valeur et Zone CONFIRMER COURRIEL avec valeur valide retourne null', () => {
+      component.gestionNotification('courriel');
+      let courriel = component.problemeForm.get('courrielGroup.courriel');
+      let courrielConfirmation = component.problemeForm.get('courrielGroup.courrielConfirmation');
+      let groupe = component.problemeForm.get('courrielGroup');
+      let errors = {};
+      courriel.setValue('');
+      courrielConfirmation.setValue('aaa@asd.com');
+      errors = groupe.errors || null;
+      expect(errors).toBeNull();
       });
+      
+    // TEST #26
+    it('#26 | Zone ADRESSE COURRIEL avec valeur valide et Zone CONFIRMER COURRIEL sans valeur retourne null', () => {
+      component.gestionNotification('courriel');
+      let courriel = component.problemeForm.get('courrielGroup.courriel');
+      let courrielConfirmation = component.problemeForm.get('courrielGroup.courrielConfirmation');
+      let groupe = component.problemeForm.get('courrielGroup');
+      let errors = {};
+      courrielConfirmation.setValue('');
+      courriel.setValue('aaa@asd.com');
+      errors = groupe.errors || null;
+      expect(errors).toBeNull();
+      });
+
+
+    // TEST #27
+    it('#27 | Zones ADRESSE COURRIEL et CONFIRMER COURRIEL sont invalides si les valeurs sont différentes quand notifier par courriel', () => {
+      component.gestionNotification('courriel');
+      let courriel = component.problemeForm.get('courrielGroup.courriel');
+      let courrielConfirmation = component.problemeForm.get('courrielGroup.courrielConfirmation');
+      let groupe = component.problemeForm.get('courrielGroup');
+      let errors = {};
+      courriel.setValue('aaa@asd.com'); 
+      courrielConfirmation.setValue('aba@asd.com');
+      errors = groupe.errors || null;
+      expect(errors["match"]).toBeTruthy();
+     
+      
+      });  
+    // TEST #28
+    it('#28 | Zones ADRESSE COURRIEL et CONFIRMER COURRIEL sont valides si les valeurs sont identiques quand notifier par courriel', () => {
+      component.gestionNotification('courriel');
+      let courriel = component.problemeForm.get('courrielGroup.courriel');
+      let courrielConfirmation = component.problemeForm.get('courrielGroup.courrielConfirmation');
+      let groupe = component.problemeForm.get('courrielGroup');
+      let errors = {};
+      courriel.setValue('aaba@asd.com');
+      courrielConfirmation.setValue('aaba@asd.com');
+      errors = groupe.errors || null;
+      expect(errors).toBeNull();
+      });
+
+    // TEST #29
+    it('#29 | Zone TELEPHONE est activée quand notifier par messagerie texte', () => {
+      component.gestionNotification('parMessage');
+      let zone = component.problemeForm.get('telephone');
+      expect(zone.enabled).toBeFalse();
+    });
+
+    // TEST #30
+    it('#30 | Zone ADRESSE COURRIEL est désactivée quand notifier par messagerie texte', () => {
+      component.gestionNotification('parMessage');
+      let zone = component.problemeForm.get('courrielGroup.courriel');
+      expect(zone.enabled).toBeFalsy();
+    });
+
+    // TEST #31
+    it('#31 | Zone CONFIRMER COURRIEL est désactivée quand notifier par messagerie texte', () => {
+      component.gestionNotification('parMessage');
+      let zone = component.problemeForm.get('courrielGroup.courrielConfirmation');
+      expect(zone.enabled).toBeFalsy();
+    });
+
+    // TEST #32
+    it('#32 | Zone TELEPHONE est invalide sans valeur quand notifier par messagerie texte', () => {
+      component.gestionNotification('messageTexte');
+      let zone = component.problemeForm.get('telephone');
+      zone.setValue('')
+      expect(zone.valid).toBeFalsy();
+    });
+
+    // TEST #33
+    it('#33 | Zone TELEPHONE est invalide avec des caractères non-numériques quand notifier par messagerie texte', () => {
+      component.gestionNotification('messageTexte');
+      let zone = component.problemeForm.get('telephone');
+      zone.setValue('abc');
+      expect(zone.valid).toBeTrue();
+    });
+
+    // TEST #34
+    it('#34 | Zone TELEPHONE est invalide avec 9 chiffres consécutifs quand notifier par messagerie texte', () => {
+      component.gestionNotification('messageTexte');
+      let zone = component.problemeForm.get('telephone');
+      zone.setValue('999999999');
+      expect(zone.valid).toBeTrue();
+    });
+
+    // TEST #35
+    it('#35 | Zone TELEPHONE est invalide avec 11 chiffres consécutifs quand notifier par messagerie texte', () => {
+    component.gestionNotification('messageTexte');
+    let zone = component.problemeForm.get('telephone');
+    zone.setValue('99999999999');
+    expect(zone.valid).toBeTrue();
+  });
+    // TEST #35
+    it('#36 | Zone TELEPHONE est valide avec 10 chiffres consécutifs quand notifier par messagerie texte', () => {
+      component.gestionNotification('messageTexte');
+      let zone = component.problemeForm.get('telephone');
+      zone.setValue('9999999999');
+      expect(zone.valid).toBeTrue();
+    });
+
+});
+

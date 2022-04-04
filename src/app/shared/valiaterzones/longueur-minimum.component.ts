@@ -1,8 +1,8 @@
 import { AbstractControl, ValidatorFn } from "@angular/forms";
 
 export class VerifierCaracteresValidator {
-   
 
+    //Nom de a méthode static
     static longueurMinimum(min: number): ValidatorFn {
         return (c: AbstractControl): { [key: string]: boolean } | null => {
             // Vérifier s'il y a une valeur et si oui sa longueur est égale ou supérieure à min
@@ -11,23 +11,5 @@ export class VerifierCaracteresValidator {
             }
             return { 'nbreCaracteresInsuffisant': true }; // erreur.  Valeur nulle ou longueur insuffisante        
         };
-    }
-
-    static plage(): ValidatorFn{
-        return (c:AbstractControl): {[key: string]: boolean} | null =>{
-            if(c.value == 'a'){
-            return null;
-        
-        }
-        
-
-    
-                return{'plageInvalide' : true
-            
-            };
-}
-
-    
-
     }
 }

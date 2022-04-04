@@ -1,21 +1,15 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-import { AppRoutingModule } from './app-routing.module';
+
+
 import { AppComponent } from './app.component';
 import { AccueilComponent } from './accueil/accueil.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { ProblemeComponent } from './probleme/probleme.component';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { ProblemeData } from './probleme/probleme-data';
-import { TypeProblemeService } from './probleme/probleme.service';
-
-
-
-
-
-
 
 
 @NgModule({
@@ -28,19 +22,10 @@ import { TypeProblemeService } from './probleme/probleme.service';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule,
-    HttpClientInMemoryWebApiModule .forRoot(ProblemeData, { delay: 1000 }),
-    RouterModule.forRoot([
-    
-    { path:'accueil', component:AccueilComponent},
-    {path:'', redirectTo:'accueil',pathMatch:'full'},
-    {path:'**', redirectTo:'accueil', pathMatch:'full'},
-  
-  
-  
-  ])
+    InMemoryWebApiModule.forRoot(ProblemeData, { delay: 1000 }),
+    HttpClientModule
   ],
-  providers: [TypeProblemeService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

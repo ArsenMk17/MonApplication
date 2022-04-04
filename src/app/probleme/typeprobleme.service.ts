@@ -1,25 +1,21 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse,HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
-import { ITypeProbleme } from './probleme';
+import { Observable, tap, catchError, throwError } from 'rxjs';
+import { ITypeProbleme } from './typeprobleme';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class TypeProblemeService {
+export class TypeproblemeService {
 
-
-    private URLDonnees = 'api/typesprobleme';
-  constructor(private http: HttpClient) { }
-
-  obtenirProbleme(): Observable<ITypeProbleme[]>{
-      return this.http.get<ITypeProbleme[]>(this.URLDonnees).pipe(
-      tap(data => console.log('obtenirCategories: ' + JSON.stringify(data))),
-      catchError(this.handleError)
-    
+  private baseUrl = 'api/typesprobleme';
+  constructor(private _http:HttpClient) { }
+  obtenirTypesProbleme(): Observable<ITypeProbleme[]> {
+    return this._http.get<ITypeProbleme[]>(this.baseUrl).pipe(
+        tap(data => console.log('obtenirTypesProbleme: ' + JSON.stringify(data))),
+        catchError(this.handleError)
     );
-    
   }
   private handleError(err: HttpErrorResponse) {
     // in a real world app, we may send the server to some remote logging infrastructure
@@ -36,6 +32,4 @@ export class TypeProblemeService {
     console.error(errorMessage);
     return throwError(errorMessage);
   }
-
-       
 }
